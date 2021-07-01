@@ -13,6 +13,7 @@
   (check-false (jsonic-token? 42)))
 
 (define (make-tokenizer port)
+  (port-count-lines! port) ; turn on line & column counting
   (define (next-token)
     (define jsonic-lexer
       (lexer
@@ -20,9 +21,19 @@
        [(from/to "//" "\n") (next-token)]
        ;; jsonic s-expression in json
        [(from/to "@$" "$@")
-        (token 'SEXP-TOK (trim-ends "@$" lexeme "$@"))]
+        (token 'SEXP-TOK (trim-ends "@$" lexeme "$@")
+               #:position (+ (pos lexeme-start) 2)
+               #:line (line lexeme-start)
+               #:column (+ (col lexeme-start) 2)
+               #:span (- (pos lexeme-end)
+                         (pos lexeme-start) 4))]
        ;; match anything else
-       [any-char (token 'CHAR-TOK lexeme)]))
+       [any-char (token 'CHAR-TOK lexeme
+                        #:position (pos lexeme-start)
+                        #:line (line lexeme-start)
+                        #:column (col lexeme-start)
+                        #:span (- (pos lexeme-end)
+                                  (pos lexeme-start)))]))
     (jsonic-lexer port))
   next-token)
 (provide (contract-out
@@ -34,8 +45,20 @@
    empty)
   (check-equal?
    (apply-tokenizer-maker make-tokenizer "@$ (+ 6 7) $@")
-   (list (token-struct 'SEXP-TOK " (+ 6 7) " #f #f #f #f #f)))
+   (list (token 'SEXP-TOK " (+ 6 7) "
+                #:position 3
+                #:line 1
+                #:column 2
+                #:span 9)))
   (check-equal?
    (apply-tokenizer-maker make-tokenizer "hi")
-   (list (token-struct 'CHAR-TOK "h" #f #f #f #f #f)
-         (token-struct 'CHAR-TOK "i" #f #f #f #f #f))))
+   (list (token 'CHAR-TOK "h"
+                #:position 1
+                #:line 1
+                #:column 0
+                #:span 1)
+         (token 'CHAR-TOK "i"
+                #:position 2
+                #:line 1
+                #:column 1
+                #:span 1))))
