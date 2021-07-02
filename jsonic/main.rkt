@@ -8,9 +8,9 @@
       (case key
         [(color-lexer)
          (dynamic-require 'jsonic/colourer 'colour-jsonic)]
-        #;[(drracket:indentation)
+        [(drracket:indentation)
          (dynamic-require 'jsonic/indenter 'indent-jsonic)]
-        #;[(drracket:toolbar-buttons)
+        [(drracket:toolbar-buttons)
          (dynamic-require 'jsonic/buttons 'button-list)]
         [else default]))
     handle-query))
