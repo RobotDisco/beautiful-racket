@@ -6,7 +6,8 @@
 (define-lex-abbrev reserved-terms (:or "print" "goto" "end" "+" ":" ";" "let"
                                        "=" "input" "-" "*" "/" "^" "mod" "("
                                        ")" "if" "then" "else" "<" ">" "<>"
-                                       "and" "or" "not"))
+                                       "and" "or" "not" "gosub" "return" "for"
+                                       "to" "step" "next"))
 
 (define basic-lexer
   (lexer-srcloc
