@@ -7,7 +7,7 @@
                                        "=" "input" "-" "*" "/" "^" "mod" "("
                                        ")" "if" "then" "else" "<" ">" "<>"
                                        "and" "or" "not" "gosub" "return" "for"
-                                       "to" "step" "next"))
+                                       "to" "step" "next" "def" ","))
 
 (define basic-lexer
   (lexer-srcloc
