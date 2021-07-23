@@ -3,7 +3,7 @@ b-program : [b-line] (/NEWLINE [b-line])*
 b-line : b-line-num [b-statement] (/":" [b-statement])* [b-rem]
 @b-line-num : INTEGER
 @b-statement : b-end | b-print | b-goto | b-let | b-input | b-if | b-gosub
-             | b-return | b-for | b-next | b-def
+             | b-return | b-for | b-next | b-def | b-import
 b-rem : REM
 b-end : /"end"
 b-print : /"print" [b-printable] (/";" [b-printable])*
@@ -19,6 +19,8 @@ b-return : /"return"
 b-for : /"for" b-id /"=" b-expr /"to" b-expr [/"step" b-expr]
 b-next : /"next" b-id
 b-def : /"def" b-id /"(" b-id [/"," b-id]* /")" /"=" b-expr
+b-import : /"import" b-import-name
+@b-import-name : RACKET-ID | STRING
 b-expr : b-or-expr
 b-or-expr : [b-or-expr "or"] b-and-expr
 b-and-expr : [b-and-expr "and"] b-not-expr
@@ -29,5 +31,5 @@ b-product : [b-product ("*"|"/"|"mod")] b-neg
 b-neg : ["-"] b-expt
 b-expt : [b-expt "^"] b-value
 @b-value : b-number | b-id | /"(" b-expr /")" | b-func
-b-func : ID /"(" b-expr [/"," b-expr]* /")"
+b-func : (ID | RACKET-ID) /"(" b-expr [/"," b-expr]* /")"
 @b-number : INTEGER | DECIMAL
