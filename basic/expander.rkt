@@ -1,5 +1,5 @@
 #lang br/quicklang
-(require "struct.rkt" "run.rkt" "elements.rkt")
+(require "struct.rkt" "run.rkt" "elements.rkt" "setup.rkt")
 (provide (rename-out [b-module-begin #%module-begin])
          (all-from-out "elements.rkt"))
 
@@ -9,14 +9,22 @@
        [(LINE-FUNC ...) (prefix-id "line-" #'(NUM ...))]
        [(VAR-ID ...) (find-property 'b-id #'(LINE ...))]
        [(IMPORT-NAME ...)
-        (find-property 'b-import-name #'(LINE ...))])
+        (find-property 'b-import-name #'(LINE ...))]
+       [(EXPORT-NAME ...)
+        (find-property 'b-export-name #'(LINE ...))])
     #'(#%module-begin
+       (module configure-runtime br
+         (require basic/setup)
+         (do-setup!))
        (require IMPORT-NAME ...)
+       (provide EXPORT-NAME ...)
        (define VAR-ID 0) ...
        LINE ...
        (define line-table
          (apply hasheqv (append (list NUM LINE-FUNC) ...)))
-       (void (run line-table)))))
+       (parameterize
+           ([current-output-port (basic-output-port)])
+         (void (run line-table))))))
 
 (begin-for-syntax
   (require racket/list)

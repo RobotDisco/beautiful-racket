@@ -7,7 +7,8 @@
                                        "=" "input" "-" "*" "/" "^" "mod" "("
                                        ")" "if" "then" "else" "<" ">" "<>"
                                        "and" "or" "not" "gosub" "return" "for"
-                                       "to" "step" "next" "def" "," "import"))
+                                       "to" "step" "next" "def" "," "import"
+                                       "export"))
 
 (define-lex-abbrev racket-id-kapu
   (:or whitespace (char-set "()[]{}\",'`;#|\\")))
