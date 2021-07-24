@@ -35,3 +35,4 @@ b-expt : [b-expt "^"] b-value
 @b-value : b-number | b-id | /"(" b-expr /")" | b-func
 b-func : (ID | RACKET-ID) /"(" b-expr [/"," b-expr]* /")"
 @b-number : INTEGER | DECIMAL
+b-repl : (b-statement | b-expr) (/":" [@b-repl])*
